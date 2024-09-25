@@ -1,4 +1,4 @@
-package com.Shop.shop.serviceUser;
+package com.Shop.shop.service;
 
 import com.Shop.shop.command.AddUserCommand;
 import com.Shop.shop.model.User;
