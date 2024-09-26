@@ -17,6 +17,6 @@ public class UserController {
     @PostMapping
     public ResponseEntity<String> addUser(@RequestBody @Valid AddUserCommand addUserCommand) {
         userService.addUser(addUserCommand);
-        return ResponseEntity.status(HttpStatus.OK).body("User successfully added ");
+        return ResponseEntity.status(HttpStatus.OK).body("User successfully added");
     }
 }
