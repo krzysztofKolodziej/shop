@@ -19,4 +19,11 @@ public class UserController {
         userService.addUser(addUserCommand);
         return ResponseEntity.status(HttpStatus.OK).body("User successfully added");
     }
+
+    @PutMapping("/{username}")
+    public ResponseEntity<String> modifyUser(@RequestBody @Valid AddUserCommand addUserCommand,
+                                             @PathVariable String username) {
+        userService.modifyUser(username, addUserCommand);
+        return ResponseEntity.status(HttpStatus.OK).body("User successfully modified");
+    }
 }

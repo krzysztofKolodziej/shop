@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AddUserCommand {
-    private Long id;
     @NotBlank(message = "Name cannot be empty")
     private String name;
     @NotBlank(message = "LastName cannot be empty")
