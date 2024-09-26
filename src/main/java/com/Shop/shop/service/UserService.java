@@ -14,7 +14,7 @@ public class UserService {
     private UserRepository userRepository;
     private UserMapper userMapper;
 
-    public User addUser(AddUserCommand addUserCommand) {
-        return userRepository.save(userMapper.mapUser(addUserCommand));
+    public void addUser(AddUserCommand addUserCommand) {
+        userRepository.save(userMapper.mapUser(addUserCommand));
     }
 }

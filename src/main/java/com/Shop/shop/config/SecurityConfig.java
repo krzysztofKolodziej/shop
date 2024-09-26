@@ -17,11 +17,11 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) ->
                 requests
-                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/h2-console/**","/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
         );
         http.sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         );
         http.formLogin(Customizer.withDefaults());
         http.httpBasic(Customizer.withDefaults());
