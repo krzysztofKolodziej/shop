@@ -5,6 +5,7 @@ import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;
+import com.Shop.shop.service.emailService.UserEmailService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Value;
