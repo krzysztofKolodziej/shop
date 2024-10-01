@@ -27,4 +27,6 @@ public class User {
     @Column(nullable = false)
     private String password;
     private String verificationToken;
+    @Column(nullable = false)
+    private boolean enabled;
 }
