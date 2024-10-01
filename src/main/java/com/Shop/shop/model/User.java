@@ -26,4 +26,5 @@ public class User {
     private String phoneNumber;
     @Column(nullable = false)
     private String password;
+    private String verificationToken;
 }
