@@ -45,7 +45,7 @@ public class UserService {
         this.userEmailService = userEmailService;
     }
 
-    public void signup(AddUserCommand addUserCommand) {
+    public User signup(AddUserCommand addUserCommand) {
         if (userRepository.existsByUsername(addUserCommand.getUsername()) ||
                 userRepository.existsByEmail(addUserCommand.getEmail()) ||
                 userRepository.existsByPhoneNumber(addUserCommand.getPhoneNumber())) {
@@ -59,7 +59,7 @@ public class UserService {
         userEmailService.sendEmail(addUserCommand.getEmail(), "Email Verification",
                 "Click the link to verify your email: " + confirmationUrl);
 
-        userRepository.save(userMapper.mapUser(addUserCommand));
+        return userRepository.save(userMapper.mapUser(addUserCommand));
     }
 
     public String login(LoginRequest loginRequest) {
