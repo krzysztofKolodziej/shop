@@ -37,6 +37,8 @@ public class UserController {
         String result = verificationTokenService.validateVerificationToken(token);
         if (result.equals("valid")) {
             return ResponseEntity.status(HttpStatus.FOUND).body("Your account has been verified successfully.");
+        } else if (result.equals("expired")) {
+            return ResponseEntity.status(HttpStatus.GONE).body("Verification token has been expired.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid verification token.");
         }
