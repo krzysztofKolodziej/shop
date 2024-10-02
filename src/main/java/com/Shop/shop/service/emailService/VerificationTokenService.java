@@ -2,11 +2,13 @@ package com.Shop.shop.service.emailService;
 
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class VerificationTokenService {
     private UserRepository userRepository;
 
