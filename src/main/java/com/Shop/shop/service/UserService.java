@@ -54,11 +54,6 @@ public class UserService {
         String hashPassword = passwordEncoder.encode(addUserCommand.getPassword());
         addUserCommand.setPassword(hashPassword);
 
-        String token = UUID.randomUUID().toString();
-        String confirmationUrl = "http://localhost:8080/verify-email?token=" + token;
-        userEmailService.sendEmail(addUserCommand.getEmail(), "Email Verification",
-                "Click the link to verify your email: " + confirmationUrl);
-
         return userRepository.save(userMapper.mapUser(addUserCommand));
     }
 
