@@ -15,6 +15,7 @@ public class UserEmailService {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(text);
+        message.setFrom("shop.app.skillforge@gmail.com");
         mailSender.send(message);
     }
 }
