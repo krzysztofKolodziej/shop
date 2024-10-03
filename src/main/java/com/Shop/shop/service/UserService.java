@@ -55,13 +55,16 @@ public class UserService {
     }
 
     public String login(LoginRequest loginRequest) {
-        boolean isEmail = loginRequest.getUsernameOrPassword().contains("@");
+        boolean isEmail = loginRequest.getUsernameOrEmail().contains("@");
 
         User user = userRepository.findByUsernameOrEmail(
-                        isEmail ? null : loginRequest.getUsernameOrPassword(),
-                        isEmail ? loginRequest.getUsernameOrPassword() : null)
+                        isEmail ? null : loginRequest.getUsernameOrEmail(),
+                        isEmail ? loginRequest.getUsernameOrEmail() : null)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
 
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
+        }
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
@@ -74,7 +77,7 @@ public class UserService {
 
     public User resetPassword(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist."));
     }
 
     public User resetPasswordCheckToken(String token, String newPassword) {
