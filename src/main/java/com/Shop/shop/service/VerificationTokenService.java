@@ -1,4 +1,4 @@
-package com.Shop.shop.service.emailService;
+package com.Shop.shop.service;
 
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;
@@ -15,6 +15,12 @@ public class VerificationTokenService {
     public void createVerificationToken(User user, String token) {
         user.setVerificationToken(token);
         user.setTokenExpirationTime(LocalDateTime.now().plusHours(24));
+        userRepository.save(user);
+    }
+
+    public void createPasswordResetToken(User user, String token) {
+        user.setVerificationToken(token);
+        user.setTokenExpirationTime(LocalDateTime.now().plusHours(1));
         userRepository.save(user);
     }
 
