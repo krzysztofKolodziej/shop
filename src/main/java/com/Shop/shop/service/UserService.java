@@ -5,7 +5,6 @@ import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;
-import com.Shop.shop.service.emailService.UserEmailService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -30,19 +28,17 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final long expirationTime;
     private final String secret;
-    private final UserEmailService userEmailService;
 
     public UserService(UserRepository userRepository, UserMapper userMapper,
                        PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
                        @Value("${jwt.expirationTime}") long expirationTime,
-                       @Value("${jwt.secret}") String secret, UserEmailService userEmailService) {
+                       @Value("${jwt.secret}") String secret) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.expirationTime = expirationTime;
         this.secret = secret;
-        this.userEmailService = userEmailService;
     }
 
     public User signup(AddUserCommand addUserCommand) {
@@ -73,6 +69,11 @@ public class UserService {
                 .withSubject(principal.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                 .sign(Algorithm.HMAC256(secret));
+    }
+
+    public User resetPassword(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
     }
 
     public void modifyUser(String username, UpdateUserCommand updateUserCommand) {
