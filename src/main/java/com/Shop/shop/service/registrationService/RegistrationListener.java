@@ -1,6 +1,8 @@
-package com.Shop.shop.service.emailService;
+package com.Shop.shop.service.registrationService;
 
 import com.Shop.shop.model.User;
+import com.Shop.shop.service.UserEmailService;
+import com.Shop.shop.service.VerificationTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;

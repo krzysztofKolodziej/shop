@@ -6,6 +6,8 @@ import com.Shop.shop.model.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class UserMapper {
     User mapUser(AddUserCommand addUserCommand) {
@@ -16,6 +18,7 @@ public class UserMapper {
                 .email(addUserCommand.getEmail())
                 .phoneNumber(addUserCommand.getPhoneNumber())
                 .password(addUserCommand.getPassword())
+                .tokenExpirationTime(LocalDateTime.now())
                 .build();
     }
 
