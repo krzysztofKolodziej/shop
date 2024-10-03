@@ -5,8 +5,9 @@ import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
 import com.Shop.shop.service.UserService;
-import com.Shop.shop.service.emailService.OnRegistrationCompleteEvent;
-import com.Shop.shop.service.emailService.VerificationTokenService;
+import com.Shop.shop.service.registrationService.OnRegistrationCompleteEvent;
+import com.Shop.shop.service.VerificationTokenService;
+import com.Shop.shop.service.resetPasswordService.OnPasswordResetRequestEvent;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,13 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         String login = userService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.OK).body(login);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody String email) {
+        User user = userService.resetPassword(email);
+        eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user));
+        return ResponseEntity.ok("Password reset link has been sent to your email");
     }
 
     @PutMapping("/account/{username}")
