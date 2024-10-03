@@ -7,11 +7,9 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class OnPasswordResetRequestEvent extends ApplicationEvent {
     private final User user;
-    private final String token;
 
-    public OnPasswordResetRequestEvent(User user, String token) {
+    public OnPasswordResetRequestEvent(User user) {
         super(user);
         this.user = user;
-        this.token = token;
     }
 }

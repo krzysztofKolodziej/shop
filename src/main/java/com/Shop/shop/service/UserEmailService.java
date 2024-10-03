@@ -1,4 +1,4 @@
-package com.Shop.shop.service.emailService;
+package com.Shop.shop.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;

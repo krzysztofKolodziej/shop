@@ -1,4 +1,4 @@
-package com.Shop.shop.service.emailService;
+package com.Shop.shop.service;
 
 import java.security.SecureRandom;
 

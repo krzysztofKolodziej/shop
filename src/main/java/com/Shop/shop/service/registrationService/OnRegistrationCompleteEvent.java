@@ -1,4 +1,4 @@
-package com.Shop.shop.service.emailService;
+package com.Shop.shop.service.registrationService;
 
 import com.Shop.shop.model.User;
 import lombok.Getter;
