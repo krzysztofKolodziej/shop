@@ -52,12 +52,13 @@ public class UserController {
     }
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody String email) {
+    public ResponseEntity<String> resetPassword(@RequestParam String email) {
         User user = userService.resetPassword(email);
         eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user));
         return ResponseEntity.ok("Password reset link has been sent to your email");
     }
 
+    @PostMapping("/reset-password-check")
     public ResponseEntity<String> resetPasswordCheckToken(@RequestParam String token, @RequestParam String newPassword) {
         String result = verificationTokenService.validateVerificationToken(token);
         if (result.equals("invalid")) {

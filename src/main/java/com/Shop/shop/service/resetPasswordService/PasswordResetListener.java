@@ -23,7 +23,7 @@ public class PasswordResetListener implements ApplicationListener<OnPasswordRese
 
         String email = user.getEmail();
         String subject = "Reset Password";
-        String resetUrl = "http://localhost:8080/reset-password?token=" + token;
+        String resetUrl = "http://localhost:8080/reset-password-check?token=" + token;
         String message = "Click the link to reset your password: " + resetUrl;
 
         userEmailService.sendEmail(email, subject, message);
