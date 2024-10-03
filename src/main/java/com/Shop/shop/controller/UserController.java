@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/verify-email")
-    public ResponseEntity<String> verifyEmail(@RequestParam("token") String token) {
+    public ResponseEntity<String> verifyEmailRegistration(@RequestParam("token") String token) {
         String result = verificationTokenService.validateVerificationToken(token);
         if (result.equals("valid")) {
             return ResponseEntity.status(HttpStatus.FOUND).body("Your account has been verified successfully.");
@@ -58,13 +58,27 @@ public class UserController {
         return ResponseEntity.ok("Password reset link has been sent to your email");
     }
 
+    public ResponseEntity<String> resetPasswordCheckToken(@RequestParam String token, @RequestParam String newPassword) {
+        String result = verificationTokenService.validateVerificationToken(token);
+        if (result.equals("invalid")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid reset token");
+        }
+        if (result.equals("expired")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reset token has expired");
+        }
+        User user = userService.resetPasswordCheckToken(token, newPassword);
+        if (user != null) {
+            return ResponseEntity.ok("Password has been reset successfully");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to reset password");
+    }
+
     @PutMapping("/account/{username}")
     public ResponseEntity<String> modifyUser(@RequestBody(required = false) @Valid UpdateUserCommand updateUserCommand,
                                              @PathVariable String username) {
         userService.modifyUser(username, updateUserCommand);
         return ResponseEntity.status(HttpStatus.OK).body("User successfully modified");
     }
-
 
 
 }
