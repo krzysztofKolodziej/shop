@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -74,6 +75,15 @@ public class UserService {
     public User resetPassword(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
+    }
+
+    public User resetPasswordCheckToken(String token, String newPassword) {
+        User user = userRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new UsernameNotFoundException("User not exist"));
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(hashedPassword);
+        user.setVerificationToken(null);
+        return userRepository.save(user);
     }
 
     public void modifyUser(String username, UpdateUserCommand updateUserCommand) {
