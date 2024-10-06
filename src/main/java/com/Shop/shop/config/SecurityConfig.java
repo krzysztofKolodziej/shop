@@ -1,5 +1,6 @@
 package com.Shop.shop.config;
 
+import com.Shop.shop.service.TokenBlacklistService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,22 +29,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager,
-                                    UserDetailsService userDetailsService) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
+    SecurityFilterChain filterChain(HttpSecurity http,
+                                    AuthenticationManager authenticationManager,
+                                    UserDetailsService userDetailsService,
+                                    TokenBlacklistService tokenBlacklistService) throws Exception {
+
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/account/**").authenticated()
-                        .anyRequest().permitAll()
-                );
-        http.addFilterBefore(new JwtAuthorizationFilter(authenticationManager, userDetailsService, secret),
-                UsernamePasswordAuthenticationFilter.class);
+                        .anyRequest().permitAll());
+
+        http.addFilterBefore(
+                new JwtAuthorizationFilter(authenticationManager, userDetailsService, tokenBlacklistService, secret),
+                        UsernamePasswordAuthenticationFilter.class);
+
         http.headers(headers ->
-                headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-        );
+                headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
+
         http.sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
         http.formLogin(AbstractHttpConfigurer::disable);
         http.httpBasic(Customizer.withDefaults());
 
