@@ -62,6 +62,10 @@ public class UserService {
                         isEmail ? loginRequest.getUsernameOrEmail() : null)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
 
+        if (!user.isEnabled()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not verified");
+        }
+
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
         }
