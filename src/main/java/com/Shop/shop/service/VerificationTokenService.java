@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Service
 @AllArgsConstructor
 public class VerificationTokenService {
+
     private UserRepository userRepository;
 
     public void createVerificationToken(User user, String token) {

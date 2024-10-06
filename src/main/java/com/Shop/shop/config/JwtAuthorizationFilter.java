@@ -1,5 +1,6 @@
 package com.Shop.shop.config;
 
+import com.Shop.shop.service.TokenBlacklistService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.servlet.FilterChain;
@@ -21,12 +22,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private static final String TOKEN_PREFIX = "Bearer ";
     private final org.springframework.security.core.userdetails.UserDetailsService userDetailsService;
     private final String secret;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
                                   UserDetailsService userDetailsService,
+                                  TokenBlacklistService tokenBlacklistService,
                                   @Value("${jwt.secret}") String secret) {
         super(authenticationManager);
         this.userDetailsService = userDetailsService;
+        this.tokenBlacklistService = tokenBlacklistService;
         this.secret = secret;
     }
 
@@ -45,6 +49,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);
         if (token != null && token.startsWith(TOKEN_PREFIX)) {
+            String jwtToken = token.replace(TOKEN_PREFIX, "");
+            if (tokenBlacklistService.isTokenBlacklisted(jwtToken)) {
+                return null;
+            }
             String userName = JWT.require(Algorithm.HMAC256(secret))
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
