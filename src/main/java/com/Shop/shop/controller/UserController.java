@@ -4,14 +4,17 @@ import com.Shop.shop.command.AddUserCommand;
 import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
+import com.Shop.shop.service.TokenBlacklistService;
 import com.Shop.shop.service.UserService;
 import com.Shop.shop.service.registrationService.OnRegistrationCompleteEvent;
 import com.Shop.shop.service.VerificationTokenService;
 import com.Shop.shop.service.resetPasswordService.OnPasswordResetRequestEvent;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.context.ApplicationEventPublisher;
 
@@ -24,6 +27,7 @@ public class UserController {
     private final UserService userService;
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenService verificationTokenService;
+    private final TokenBlacklistService tokenBlacklistService;
 
 
     @PostMapping("/signup")
@@ -49,6 +53,19 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
         String login = userService.login(loginRequest);
         return ResponseEntity.status(HttpStatus.OK).body(login);
+    }
+
+    @PostMapping("/account/logout")
+    public ResponseEntity<String> logoutUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+
+        if (token != null && token.startsWith("Bearer ")) {
+            String tokenWithoutBearer = token.substring(7); //
+            tokenBlacklistService.blacklistToken(tokenWithoutBearer);
+            SecurityContextHolder.clearContext();
+            return ResponseEntity.ok("User has been logged out successfully");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token is missing or invalid");
     }
 
     @PostMapping("/reset-password")
