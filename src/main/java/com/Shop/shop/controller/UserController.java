@@ -98,6 +98,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("User successfully modified");
     }
 
-
+    @DeleteMapping("/account/delete")
+    public ResponseEntity<String> deleteUser(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
+        userService.deleteUser(username);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User has been deleted");
+    }
 }
 
