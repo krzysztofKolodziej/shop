@@ -33,4 +33,14 @@ public class UserMapper {
         }
         return user;
     }
+
+    UserDto mapGetUserDetails(User user) {
+        return UserDto.builder()
+                .name(user.getName())
+                .lastname(user.getLastname())
+                .email(user.getEmail())
+                .phoneNumber(user.getPhoneNumber())
+                .lastLogin(user.getLastLogin())
+                .build();
+    }
 }

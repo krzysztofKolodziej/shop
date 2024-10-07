@@ -5,6 +5,7 @@ import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
 import com.Shop.shop.service.TokenBlacklistService;
+import com.Shop.shop.service.UserDto;
 import com.Shop.shop.service.UserService;
 import com.Shop.shop.service.registrationService.OnRegistrationCompleteEvent;
 import com.Shop.shop.service.VerificationTokenService;
@@ -96,6 +97,14 @@ public class UserController {
                                              @PathVariable String username) {
         userService.modifyUser(username, updateUserCommand);
         return ResponseEntity.status(HttpStatus.OK).body("User successfully modified");
+    }
+
+    @GetMapping("/account/details")
+    public ResponseEntity<UserDto> getUser(HttpServletRequest request) {
+        String username = request.getUserPrincipal().getName();
+        UserDto userDetails = userService.getUserDetails(username);
+        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+
     }
 
     @DeleteMapping("/account/delete")
