@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
@@ -70,10 +71,15 @@ public class UserService {
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
         }
+
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+
         Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
         UserDetails principal = (UserDetails) authenticate.getPrincipal();
+
         return JWT.create()
                 .withSubject(principal.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
@@ -108,6 +114,13 @@ public class UserService {
         updateUserCommand.setNewPassword(hashPassword);
 
         userRepository.save(userMapper.mapUserModify(updateUserCommand, user));
+    }
+
+    public UserDto getUserDetails(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
+
+        return userMapper.mapGetUserDetails(user);
     }
 
     @Transactional

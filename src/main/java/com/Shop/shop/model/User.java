@@ -33,4 +33,5 @@ public class User {
     private boolean enabled;
     @Column(nullable = false)
     private LocalDateTime tokenExpirationTime;
+    private LocalDateTime lastLogin;
 }
