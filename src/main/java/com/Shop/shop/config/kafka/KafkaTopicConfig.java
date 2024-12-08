@@ -1,4 +1,4 @@
-package com.Shop.shop.config.kafkaConfig;
+package com.Shop.shop.config.kafka;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.springframework.beans.factory.annotation.Value;

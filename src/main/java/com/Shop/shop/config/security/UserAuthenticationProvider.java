@@ -1,4 +1,4 @@
-package com.Shop.shop.config;
+package com.Shop.shop.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;

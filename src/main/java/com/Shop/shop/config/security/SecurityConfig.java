@@ -1,6 +1,6 @@
-package com.Shop.shop.config;
+package com.Shop.shop.config.security;
 
-import com.Shop.shop.service.TokenBlacklistService;
+import com.Shop.shop.service.user.token.TokenBlacklistService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

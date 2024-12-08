@@ -4,12 +4,12 @@ import com.Shop.shop.command.AddUserCommand;
 import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
-import com.Shop.shop.service.TokenBlacklistService;
-import com.Shop.shop.service.UserDto;
-import com.Shop.shop.service.UserService;
-import com.Shop.shop.service.registrationService.OnRegistrationCompleteEvent;
-import com.Shop.shop.service.VerificationTokenService;
-import com.Shop.shop.service.resetPasswordService.OnPasswordResetRequestEvent;
+import com.Shop.shop.service.user.token.TokenBlacklistService;
+import com.Shop.shop.service.user.UserDto;
+import com.Shop.shop.service.user.UserService;
+import com.Shop.shop.service.user.registration.OnRegistrationCompleteEvent;
+import com.Shop.shop.service.user.token.VerificationTokenService;
+import com.Shop.shop.service.user.resetpassword.OnPasswordResetRequestEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,6 @@ public class UserController {
     private final ApplicationEventPublisher eventPublisher;
     private final VerificationTokenService verificationTokenService;
     private final TokenBlacklistService tokenBlacklistService;
-
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody @Valid AddUserCommand addUserCommand) {

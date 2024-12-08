@@ -1,4 +1,4 @@
-package com.Shop.shop.service;
+package com.Shop.shop.service.user;
 
 import com.Shop.shop.command.AddUserCommand;
 import com.Shop.shop.command.LoginRequest;
