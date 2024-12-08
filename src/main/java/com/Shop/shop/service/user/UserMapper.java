@@ -1,9 +1,9 @@
-package com.Shop.shop.service;
+package com.Shop.shop.service.user;
 
 import com.Shop.shop.command.AddUserCommand;
 import com.Shop.shop.command.UpdateUserCommand;
 import com.Shop.shop.model.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import com.Shop.shop.service.user.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.Shop.shop.service;
+package com.Shop.shop.service.user.token;
 
 import org.springframework.stereotype.Service;
 

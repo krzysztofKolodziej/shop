@@ -1,4 +1,4 @@
-package com.Shop.shop.service;
+package com.Shop.shop.service.user.token;
 
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;

@@ -1,14 +1,13 @@
-package com.Shop.shop.service.resetPasswordService;
+package com.Shop.shop.service.user.registration;
 
 import com.Shop.shop.model.User;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
-
 @Getter
-public class OnPasswordResetRequestEvent extends ApplicationEvent {
+public class OnRegistrationCompleteEvent extends ApplicationEvent {
     private final User user;
 
-    public OnPasswordResetRequestEvent(User user) {
+    public OnRegistrationCompleteEvent(User user) {
         super(user);
         this.user = user;
     }

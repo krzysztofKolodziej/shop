@@ -1,6 +1,6 @@
 package com.Shop.shop.command;
 
-import com.Shop.shop.command.validPassword.ValidPassword;
+import com.Shop.shop.command.validation.ValidPassword;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

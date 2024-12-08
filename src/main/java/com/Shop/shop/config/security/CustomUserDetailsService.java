@@ -1,4 +1,4 @@
-package com.Shop.shop.config;
+package com.Shop.shop.config.security;
 
 import com.Shop.shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

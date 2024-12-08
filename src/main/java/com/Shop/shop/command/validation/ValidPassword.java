@@ -1,4 +1,4 @@
-package com.Shop.shop.command.validPassword;
+package com.Shop.shop.command.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

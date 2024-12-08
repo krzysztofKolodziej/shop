@@ -1,6 +1,6 @@
-package com.Shop.shop.config;
+package com.Shop.shop.config.security;
 
-import com.Shop.shop.service.TokenBlacklistService;
+import com.Shop.shop.service.user.token.TokenBlacklistService;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.servlet.FilterChain;
