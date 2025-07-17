@@ -1,5 +1,4 @@
-# Shop
-
+Microservice “Shop”
 User management in an e-commerce system. Main functionalities:
 - Registration with email verification, login, and session management via JWT
 - Logging out of the application with JWT token invalidation
@@ -12,4 +11,3 @@ Technologies used:
 - Hibernate
 - Tools: Maven, Git, Lombok
 - Database: PostgreSQL prod, H2 dev
-
