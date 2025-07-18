@@ -1,7 +1,6 @@
 package com.Shop.shop.command.validation;
 
 import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -18,9 +17,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ValidPassword {
 
     String message() default "Invalid Password";
-
+    
     Class<?>[] groups() default {};
-
-    Class<? extends Payload>[] payload() default {};
+    
+    Class<? extends jakarta.validation.Payload>[] payload() default {};
 }
 

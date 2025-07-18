@@ -77,7 +77,7 @@ public class UserService {
         userRepository.save(user);
 
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                new UsernamePasswordAuthenticationToken(user.getUsername(), loginRequest.getPassword())
         );
         UserDetails principal = (UserDetails) authenticate.getPrincipal();
 
