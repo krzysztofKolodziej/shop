@@ -39,14 +39,8 @@ public class UserController {
 
     @GetMapping("/verify-email")
     public ResponseEntity<String> verifyEmailRegistration(@RequestParam("token") String token) {
-        String result = verificationTokenService.validateVerificationToken(token);
-        if (result.equals("valid")) {
-            return ResponseEntity.status(HttpStatus.FOUND).body("Your account has been verified successfully.");
-        } else if (result.equals("expired")) {
-            return ResponseEntity.status(HttpStatus.GONE).body("Verification token has been expired.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid verification token.");
-        }
+        verificationTokenService.validateVerificationToken(token);
+        return ResponseEntity.status(HttpStatus.OK).body("Your account has been verified successfully.");
     }
 
     @PostMapping("/login")
@@ -77,18 +71,9 @@ public class UserController {
 
     @PostMapping("/reset-password-check")
     public ResponseEntity<String> resetPasswordCheckToken(@RequestParam String token, @RequestParam String newPassword) {
-        String result = verificationTokenService.validateVerificationToken(token);
-        if (result.equals("invalid")) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid reset token");
-        }
-        if (result.equals("expired")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Reset token has expired");
-        }
-        User user = userService.resetPasswordCheckToken(token, newPassword);
-        if (user != null) {
-            return ResponseEntity.ok("Password has been reset successfully");
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to reset password");
+        verificationTokenService.validateVerificationToken(token);
+        userService.resetPasswordCheckToken(token, newPassword);
+        return ResponseEntity.ok("Password has been reset successfully");
     }
 
     @PutMapping("/account/{username}")

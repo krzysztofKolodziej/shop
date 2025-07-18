@@ -3,21 +3,22 @@ package com.Shop.shop.service.user;
 import com.Shop.shop.command.AddUserCommand;
 import com.Shop.shop.command.LoginRequest;
 import com.Shop.shop.command.UpdateUserCommand;
+import com.Shop.shop.exception.InvalidCredentialsException;
+import com.Shop.shop.exception.UserAlreadyExistsException;
+import com.Shop.shop.exception.UserNotFoundException;
+import com.Shop.shop.exception.UserNotVerifiedException;
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -48,7 +49,7 @@ public class UserService {
         if (userRepository.existsByUsername(addUserCommand.getUsername()) ||
                 userRepository.existsByEmail(addUserCommand.getEmail()) ||
                 userRepository.existsByPhoneNumber(addUserCommand.getPhoneNumber())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provided user exist");
+            throw new UserAlreadyExistsException("User with provided credentials already exists");
         }
         String hashPassword = passwordEncoder.encode(addUserCommand.getPassword());
         addUserCommand.setPassword(hashPassword);
@@ -62,14 +63,14 @@ public class UserService {
         User user = userRepository.findByUsernameOrEmail(
                         isEmail ? null : loginRequest.getUsernameOrEmail(),
                         isEmail ? loginRequest.getUsernameOrEmail() : null)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if (!user.isEnabled()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is not verified");
+            throw new UserNotVerifiedException("User account is not verified");
         }
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid password");
+            throw new InvalidCredentialsException("Invalid password");
         }
 
         user.setLastLogin(LocalDateTime.now());
@@ -88,12 +89,12 @@ public class UserService {
 
     public User resetPassword(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist."));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     public User resetPasswordCheckToken(String token, String newPassword) {
         User user = userRepository.findByVerificationToken(token)
-                .orElseThrow(() -> new UsernameNotFoundException("User not exist"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         String hashedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(hashedPassword);
         user.setVerificationToken(null);
@@ -102,12 +103,12 @@ public class UserService {
 
     public void modifyUser(String username, UpdateUserCommand updateUserCommand) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         if ((userRepository.existsByUsername(updateUserCommand.getUsername()) && !user.getUsername().equals(updateUserCommand.getUsername())) ||
                 (userRepository.existsByEmail(updateUserCommand.getEmail()) && !user.getEmail().equals(updateUserCommand.getEmail())) ||
                 userRepository.existsByPhoneNumber(updateUserCommand.getPhoneNumber())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Provided user exist");
+            throw new UserAlreadyExistsException("User with provided credentials already exists");
         }
 
         String hashPassword = passwordEncoder.encode(updateUserCommand.getNewPassword());
@@ -118,7 +119,7 @@ public class UserService {
 
     public UserDto getUserDetails(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not exist"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         return userMapper.mapGetUserDetails(user);
     }

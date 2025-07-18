@@ -1,5 +1,6 @@
 package com.Shop.shop.service.user.token;
 
+import com.Shop.shop.exception.InvalidTokenException;
 import com.Shop.shop.model.User;
 import com.Shop.shop.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -26,13 +27,13 @@ public class VerificationTokenService {
     }
 
     public String validateVerificationToken(String token) {
-        User user = userRepository.findByVerificationToken(token).orElse(null);
-        if (user == null) {
-            return "invalid";
-        }
+        User user = userRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new InvalidTokenException("Invalid verification token"));
+        
         if (user.getTokenExpirationTime().isBefore(LocalDateTime.now())) {
-            return "expired";
+            throw new InvalidTokenException("Verification token has expired");
         }
+        
         user.setEnabled(true);
         userRepository.save(user);
         return "valid";
